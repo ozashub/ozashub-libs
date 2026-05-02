@@ -1497,8 +1497,9 @@ local Library do
     -- Library
     Library = {
         Theme = nil,
+        Initializing = true,
 
-        MenuKeybind = tostring(Enum.KeyCode.Z), 
+        MenuKeybind = tostring(Enum.KeyCode.Z),
         Flags = { },
 
         Tween = {
@@ -1656,6 +1657,24 @@ local Library do
         Tween.Create = function(self, Item, Info, Goal, IsRawItem)
             Item = IsRawItem and Item or Item.Instance
             Info = Info or TweenInfo.new(Library.Tween.Time, Library.Tween.Style, Library.Tween.Direction)
+
+            if Library.Initializing then
+                for property, value in pairs(Goal) do
+                    Item[property] = value
+                end
+                local FakeBindable = Instance.new("BindableEvent")
+                task.defer(function()
+                    FakeBindable:Fire()
+                    FakeBindable:Destroy()
+                end)
+                local FakeTween = setmetatable({
+                    Tween = { Completed = FakeBindable.Event, PlaybackState = Enum.PlaybackState.Completed },
+                    Info = Info,
+                    Goal = Goal,
+                    Item = Item,
+                }, Tween)
+                return FakeTween
+            end
 
             local NewTween = {
                 Tween = TweenService:Create(Item, Info, Goal),
@@ -9818,7 +9837,7 @@ local Library do
         if AutoloadTheme ~= "" then
             local Success, Result = Library:LoadTheme(AutoloadTheme)
 
-            if Success then 
+            if Success then
                 Library:Notification({
                     Name = "Success",
                     Description = "Successfully loaded autoload theme",
@@ -9836,6 +9855,8 @@ local Library do
                 })
             end
         end
+
+        Library.Initializing = false
     end
 end 
 
