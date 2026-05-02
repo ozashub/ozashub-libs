@@ -7629,16 +7629,27 @@ local Library do
             end
 
             function Window:SetOpen(Bool)
-                if Debounce then 
-                    return 
+                if Debounce then
+                    return
                 end
 
                 Window.IsOpen = Bool
 
                 Debounce = true
 
-                if Bool then 
+                if Bool then
                     Items["MainFrame"].Instance.Visible = true
+                else
+                    local snapshot = {}
+                    for _, openFrame in pairs(Library.OpenFrames) do
+                        snapshot[#snapshot + 1] = openFrame
+                    end
+                    for _, openFrame in ipairs(snapshot) do
+                        if openFrame and openFrame.SetOpen then
+                            pcall(function() openFrame:SetOpen(false) end)
+                        end
+                    end
+                    table.clear(Library.OpenFrames)
                 end
 
                 local Descendants = Items["MainFrame"].Instance:GetDescendants()
