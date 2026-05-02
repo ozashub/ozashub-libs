@@ -1487,6 +1487,7 @@ local Library do
     local RectNew = Rect.new
 
     local IsMobile = UserInputService.TouchEnabled or false
+    Library.IsMobile = IsMobile
 
     gethui = gethui or function()
         return CoreGui
@@ -2476,6 +2477,25 @@ local Library do
         end
     end
 
+    Library.AddSeparator = function(self, Parent)
+        if not Parent or not Parent.Instance then
+            return
+        end
+
+        local Separator = Instances:Create("Frame", {
+            Parent = Parent.Instance,
+            Name = "\0",
+            Size = UDim2New(1, 0, 0, 1),
+            BorderSizePixel = 0,
+            BackgroundColor3 = Library.Theme.Border or FromRGB(40, 40, 45),
+            BackgroundTransparency = 0.4
+        })
+
+        Separator:AddToTheme({BackgroundColor3 = "Border"})
+
+        return Separator
+    end
+
     Library.IsMouseOverFrame = function(self, Frame, XOffset, YOffset)
         Frame = Frame.Instance
         XOffset = XOffset or 0
@@ -2627,7 +2647,7 @@ local Library do
                     BorderColor3 = FromRGB(0, 0, 0),
                     AnchorPoint = Vector2New(1, 0.5),
                     Position = UDim2New(1, 0, 0.5, 0),
-                    Size = UDim2New(0, 20, 0, 20),
+                    Size = UDim2New(0, 36, 0, 18),
                     ZIndex = 2,
                     BorderSizePixel = 0,
                     BackgroundColor3 = FromRGB(34, 39, 45)
@@ -2636,14 +2656,14 @@ local Library do
                 Instances:Create("UICorner", {
                     Parent = Items["Indicator"].Instance,
                     Name = "\0",
-                    CornerRadius = UDimNew(0, 4)
+                    CornerRadius = UDimNew(0, 999)
                 })
 
                 Items["Inline"] = Instances:Create("Frame", {
                     Parent = Items["Indicator"].Instance,
                     Name = "\0",
-                    Size = UDim2New(1, -4, 1, -4),
-                    Position = UDim2New(0, 2, 0, 2),
+                    Size = UDim2New(1, -2, 1, -2),
+                    Position = UDim2New(0, 1, 0, 1),
                     BorderColor3 = FromRGB(0, 0, 0),
                     ZIndex = 2,
                     BorderSizePixel = 0,
@@ -2653,34 +2673,24 @@ local Library do
                 Instances:Create("UICorner", {
                     Parent = Items["Inline"].Instance,
                     Name = "\0",
-                    CornerRadius = UDimNew(0, 4)
+                    CornerRadius = UDimNew(0, 999)
                 })
 
-                Instances:Create("UIGradient", {
+                Items["Check"] = Instances:Create("Frame", {
                     Parent = Items["Inline"].Instance,
                     Name = "\0",
-                    Rotation = 84,
-                    Color = RGBSequence{RGBSequenceKeypoint(0, FromRGB(255, 255, 255)), RGBSequenceKeypoint(1, FromRGB(211, 211, 211))}
-                }):AddToTheme({Color = function()
-                    return RGBSequence{RGBSequenceKeypoint(0, FromRGB(255, 255, 255)), RGBSequenceKeypoint(1, Library.Theme["Dark Gradient"])}
-                end})
-
-                Items["Check"] = Instances:Create("ImageLabel", {
-                    Parent = Items["Inline"].Instance,
-                    Name = "\0",
-                    Visible = true,
-                    ScaleType = Enum.ScaleType.Fit,
+                    Position = UDim2New(0, 2, 0, 2),
+                    Size = UDim2New(0, 12, 0, 12),
                     BorderColor3 = FromRGB(0, 0, 0),
-                    Size = UDim2New(1, -2, 1, -2),
-                    AnchorPoint = Vector2New(0.5, 0.5),
-                    Image = "rbxassetid://116339777575852",
-                    BackgroundTransparency = 1,
-                    Position = UDim2New(0.5, 0, 0.5, 0),
-                    ImageTransparency = 1,
                     ZIndex = 2,
                     BorderSizePixel = 0,
-                    BackgroundColor3 = FromRGB(255, 255, 255),
-                    ImageColor3 = FromRGB(0, 0, 0)
+                    BackgroundColor3 = FromRGB(86, 86, 88)
+                })
+
+                Instances:Create("UICorner", {
+                    Parent = Items["Check"].Instance,
+                    Name = "\0",
+                    CornerRadius = UDimNew(0, 999)
                 })
 
                 Items["SubElements"] = Instances:Create("Frame", {
@@ -2689,7 +2699,7 @@ local Library do
                     BorderColor3 = FromRGB(0, 0, 0),
                     AnchorPoint = Vector2New(1, 0),
                     BackgroundTransparency = 1,
-                    Position = UDim2New(1, -24, 0, 0),
+                    Position = UDim2New(1, -42, 0, 0),
                     Size = UDim2New(0, 0, 1, 0),
                     BorderSizePixel = 0,
                     AutomaticSize = Enum.AutomaticSize.X,
@@ -2712,7 +2722,7 @@ local Library do
             end
 
             function Toggle:Set(Bool)
-                Toggle.Value = Bool 
+                Toggle.Value = Bool
                 Library.Flags[Toggle.Flag] = Bool
 
                 if Bool then
@@ -2722,7 +2732,10 @@ local Library do
                     Items["Indicator"]:Tween(nil, {BackgroundColor3 = Library.Theme.Accent})
                     Items["Inline"]:Tween(nil, {BackgroundColor3 = Library.Theme.Accent})
 
-                    Items["Check"]:Tween(nil, {ImageTransparency = 0})
+                    Items["Check"]:Tween(nil, {
+                        Position = UDim2New(1, -14, 0, 2),
+                        BackgroundColor3 = FromRGB(255, 255, 255),
+                    })
                     Items["Text"]:Tween(nil, {TextTransparency = 0})
                 else
                     Items["Indicator"]:ChangeItemTheme({BackgroundColor3 = "Element"})
@@ -2731,11 +2744,14 @@ local Library do
                     Items["Indicator"]:Tween(nil, {BackgroundColor3 = Library.Theme.Element})
                     Items["Inline"]:Tween(nil, {BackgroundColor3 = Library.Theme.Element})
 
-                    Items["Check"]:Tween(nil, {ImageTransparency = 1})
+                    Items["Check"]:Tween(nil, {
+                        Position = UDim2New(0, 2, 0, 2),
+                        BackgroundColor3 = FromRGB(86, 86, 88),
+                    })
                     Items["Text"]:Tween(nil, {TextTransparency = 0.5})
                 end
 
-                if Data.Callback then 
+                if Data.Callback then
                     Library:SafeCall(Data.Callback, Bool)
                 end
             end
@@ -9216,6 +9232,8 @@ local Library do
                 return NewKeybind
             end
 
+            Library:AddSeparator(Toggle.Section.Items["Content"])
+
             return Toggle
         end
 
@@ -9320,6 +9338,8 @@ local Library do
             Items["Button"]:Connect("MouseButton1Down", function()
                 Button:Press()
             end)
+
+            Library:AddSeparator(Button.Section.Items["Content"])
 
             return Button
         end
@@ -9536,6 +9556,8 @@ local Library do
                 Slider:Set(Value)
             end
 
+            Library:AddSeparator(Slider.Section.Items["Content"])
+
             return Slider
         end
 
@@ -9595,6 +9617,8 @@ local Library do
             function Dropdown:SetVisibility(Bool)
                 NewDropdown:SetVisibility(Bool)
             end
+
+            Library:AddSeparator(Dropdown.Section.Items["Content"])
 
             return Dropdown
         end
