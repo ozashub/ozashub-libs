@@ -1873,92 +1873,7 @@ local Library do
         end
 
         Instances.Tooltip = function(self, Text)
-            if Text == nil or type(Text) ~= "string" then
-                return
-            end
-
-            if not self.Instance then 
-                return
-            end
-
-            local Gui = self.Instance
-
-            local MouseLocation = UserInputService:GetMouseLocation()
-            local RenderStepped
-
-            local Newtooltip = Instances:Create("Frame", {
-                Parent = Library.Holder.Instance,
-                Name = "\0",
-                BorderColor3 = FromRGB(0, 0, 0),
-                BackgroundTransparency = 1,
-                Position = UDim2New(0, MouseLocation.X, 0, MouseLocation.Y - 38),
-                BorderSizePixel = 0,
-                ZIndex = 2,
-                AutomaticSize = Enum.AutomaticSize.XY,
-                BackgroundColor3 = FromRGB(16, 18, 21)
-            })  Newtooltip:AddToTheme({BackgroundColor3 = "Background"})
-
-            local UIStroke = Instances:Create("UIStroke", {
-                Parent = Newtooltip.Instance,
-                Name = "\0",
-                Color = FromRGB(32, 36, 42),
-                Transparency = 1,
-                ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-            })  UIStroke:AddToTheme({Color = "Border"})
-
-            Instances:Create("UIPadding", {
-                Parent = Newtooltip.Instance,
-                Name = "\0",
-                PaddingTop = UDimNew(0, 5),
-                PaddingBottom = UDimNew(0, 5),
-                PaddingRight = UDimNew(0, 5),
-                PaddingLeft = UDimNew(0, 5)
-            })
-
-            local TooltipText = Instances:Create("TextLabel", {
-                Parent = Newtooltip.Instance,
-                Name = "\0",
-                FontFace = Library.Font,
-                TextColor3 = FromRGB(255, 255, 255),
-                BorderColor3 = FromRGB(0, 0, 0),
-                Text = Text,
-                AutomaticSize = Enum.AutomaticSize.XY,
-                BackgroundTransparency = 1,
-                TextXAlignment = Enum.TextXAlignment.Left,
-                BorderSizePixel = 0,
-                ZIndex = 2,
-                TextTransparency = 1,
-                TextSize = 14,
-                BackgroundColor3 = FromRGB(255, 255, 255)
-            })
-
-            Instances:Create("UICorner", {
-                Parent = Newtooltip.Instance,
-                Name = "\0",
-                CornerRadius = UDimNew(0, 5)
-            })
-
-            Library:Connect(Gui.MouseEnter, function()
-                Newtooltip:Tween(nil, {BackgroundTransparency = 0.15})
-                TooltipText:Tween(nil, {TextTransparency = 0})
-                UIStroke:Tween(nil, {Transparency = 0.4})
-
-                RenderStepped = RunService.RenderStepped:Connect(function()
-                    MouseLocation = UserInputService:GetMouseLocation()
-                    Newtooltip:Tween(nil, {Position = UDim2New(0, MouseLocation.X, 0, MouseLocation.Y - 38)})
-                end)
-            end)
-
-            Library:Connect(Gui.MouseLeave, function()
-                Newtooltip:Tween(nil, {BackgroundTransparency = 1})
-                TooltipText:Tween(nil, {TextTransparency = 1})
-                UIStroke:Tween(nil, {Transparency = 1})
-
-                if RenderStepped then 
-                    RenderStepped:Disconnect()
-                    RenderStepped = nil
-                end
-            end)
+            return
         end
 
         Instances.MakeDraggable = function(self)
@@ -7629,17 +7544,9 @@ local Library do
             end
 
             function Window:SetOpen(Bool)
-                if Debounce then
-                    return
-                end
-
                 Window.IsOpen = Bool
 
-                Debounce = true
-
-                if Bool then
-                    Items["MainFrame"].Instance.Visible = true
-                else
+                if not Bool then
                     local snapshot = {}
                     for _, openFrame in pairs(Library.OpenFrames) do
                         snapshot[#snapshot + 1] = openFrame
@@ -7652,31 +7559,7 @@ local Library do
                     table.clear(Library.OpenFrames)
                 end
 
-                local Descendants = Items["MainFrame"].Instance:GetDescendants()
-                TableInsert(Descendants, Items["MainFrame"].Instance)
-
-                local NewTween
-
-                for Index, Value in Descendants do 
-                    local TransparencyProperty = Tween:GetProperty(Value)
-
-                    if not TransparencyProperty then 
-                        continue
-                    end
-
-                    if type(TransparencyProperty) == "table" then 
-                        for _, Property in TransparencyProperty do 
-                            NewTween = Tween:FadeItem(Value, Property, Bool, Window.FadeSpeed)
-                        end
-                    else
-                        NewTween = Tween:FadeItem(Value, TransparencyProperty, Bool, Window.FadeSpeed)
-                    end
-                end
-
-                Library:Connect(NewTween.Tween.Completed, function()
-                    Debounce = false
-                    Items["MainFrame"].Instance.Visible = Bool
-                end)
+                Items["MainFrame"].Instance.Visible = Bool
             end
 
             function Window:SetText(Text)
