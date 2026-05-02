@@ -2675,8 +2675,10 @@ local Library do
                     Parent = Items["Inline"].Instance,
                     Name = "\0",
                     Rotation = 0,
-                    Color = RGBSequence{RGBSequenceKeypoint(0, FromRGB(170, 170, 170)), RGBSequenceKeypoint(1, FromRGB(75, 75, 75))}
-                })
+                    Color = RGBSequence{RGBSequenceKeypoint(0, FromRGB(255, 255, 255)), RGBSequenceKeypoint(1, FromRGB(211, 211, 211))}
+                }):AddToTheme({Color = function()
+                    return RGBSequence{RGBSequenceKeypoint(0, FromRGB(255, 255, 255)), RGBSequenceKeypoint(1, Library.Theme["Dark Gradient"])}
+                end})
 
                 Items["Check"] = Instances:Create("Frame", {
                     Parent = Items["Inline"].Instance,
