@@ -7813,57 +7813,28 @@ local Library do
                 Items["Inactive"].Instance.Size = UDim2New(0, 25, 0, 32)
             end
 
-            local Debounce = false
-
             function Page:Switch(Bool)
-                if Debounce then 
-                    return 
-                end
-
                 Page.Active = Bool
                 Items["PageContent"].Instance.Visible = Bool
                 Items["PageContent"].Instance.Parent = Bool and Page.Window.Items["Content"].Instance or Library.UnusedHolder.Instance
-                
-                Debounce = true 
 
                 if Bool then
-                    Items["Text"].Instance.Visible = true 
-                    Items["Inactive"]:Tween(nil, {BackgroundTransparency = 0, Size = UDim2New(0, Items["Text"].Instance.TextBounds.X + 38, 0, 32)})
+                    Items["Text"].Instance.Visible = true
+                    Items["Inactive"].Instance.BackgroundTransparency = 0
+                    Items["Inactive"].Instance.Size = UDim2New(0, Items["Text"].Instance.TextBounds.X + 38, 0, 32)
                     Items["Icon"]:ChangeItemTheme({ImageColor3 = "Accent"})
-                    Items["Icon"]:Tween(nil, {ImageColor3 = Library.Theme.Accent, ImageTransparency = 0})
+                    Items["Icon"].Instance.ImageColor3 = Library.Theme.Accent
+                    Items["Icon"].Instance.ImageTransparency = 0
 
                     Library.CurrentPage = Page
                 else
-                    Items["Text"].Instance.Visible = false 
-                    Items["Inactive"]:Tween(nil, {BackgroundTransparency = 1, Size = UDim2New(0, 25, 0, 32)})
+                    Items["Text"].Instance.Visible = false
+                    Items["Inactive"].Instance.BackgroundTransparency = 1
+                    Items["Inactive"].Instance.Size = UDim2New(0, 25, 0, 32)
                     Items["Icon"]:ChangeItemTheme({ImageColor3 = "Image"})
-                    Items["Icon"]:Tween(nil, {ImageColor3 = Library.Theme.Image, ImageTransparency = 0.5}) 
+                    Items["Icon"].Instance.ImageColor3 = Library.Theme.Image
+                    Items["Icon"].Instance.ImageTransparency = 0.5
                 end
-
-                local Descendants = Items["PageContent"].Instance:GetDescendants()
-                TableInsert(Descendants, Items["PageContent"].Instance)
-
-                local NewTween
-
-                for Index, Value in Descendants do 
-                    local TransparencyProperty = Tween:GetProperty(Value)
-
-                    if not TransparencyProperty then 
-                        continue
-                    end
-
-                    if type(TransparencyProperty) == "table" then 
-                        for _, Property in TransparencyProperty do 
-                            NewTween = Tween:FadeItem(Value, Property, Bool, Page.Window.FadeSpeed)
-                        end
-                    else
-                        NewTween = Tween:FadeItem(Value, TransparencyProperty, Bool, Page.Window.FadeSpeed)
-                    end
-                end
-
-                Library:Connect(NewTween.Tween.Completed, function()
-                    Debounce = false
-                end)
             end
 
             Items["Inactive"]:Connect("MouseButton1Down", function()
@@ -8019,57 +7990,28 @@ local Library do
                 end
             end
 
-            local Debounce = false
-
             function SubPage:Switch(Bool)
-                if Debounce then 
-                    return 
-                end
-
                 SubPage.Active = Bool
                 Items["PageContent"].Instance.Visible = Bool
                 Items["PageContent"].Instance.Parent = Bool and SubPage.Page.Items["Columns"].Instance or Library.UnusedHolder.Instance
-                
-                Debounce = true 
 
                 if Bool then
-                    Items["Text"].Instance.Visible = true 
-                    Items["Inactive"]:Tween(nil, {BackgroundTransparency = 0, Size = UDim2New(0, Items["Text"].Instance.TextBounds.X + 38, 0, 32)})
+                    Items["Text"].Instance.Visible = true
+                    Items["Inactive"].Instance.BackgroundTransparency = 0
+                    Items["Inactive"].Instance.Size = UDim2New(0, Items["Text"].Instance.TextBounds.X + 38, 0, 32)
                     Items["Icon"]:ChangeItemTheme({ImageColor3 = "Accent"})
-                    Items["Icon"]:Tween(nil, {ImageColor3 = Library.Theme.Accent, ImageTransparency = 0}) 
+                    Items["Icon"].Instance.ImageColor3 = Library.Theme.Accent
+                    Items["Icon"].Instance.ImageTransparency = 0
 
                     Library.CurrentPage = SubPage
                 else
-                    Items["Text"].Instance.Visible = false 
-                    Items["Inactive"]:Tween(nil, {BackgroundTransparency = 1, Size = UDim2New(0, 25, 0, 32)})
+                    Items["Text"].Instance.Visible = false
+                    Items["Inactive"].Instance.BackgroundTransparency = 1
+                    Items["Inactive"].Instance.Size = UDim2New(0, 25, 0, 32)
                     Items["Icon"]:ChangeItemTheme({ImageColor3 = "Image"})
-                    Items["Icon"]:Tween(nil, {ImageColor3 = Library.Theme.Image, ImageTransparency = 0.5}) 
+                    Items["Icon"].Instance.ImageColor3 = Library.Theme.Image
+                    Items["Icon"].Instance.ImageTransparency = 0.5
                 end
-
-                local Descendants = Items["PageContent"].Instance:GetDescendants()
-                TableInsert(Descendants, Items["PageContent"].Instance)
-
-                local NewTween
-
-                for Index, Value in Descendants do 
-                    local TransparencyProperty = Tween:GetProperty(Value)
-
-                    if not TransparencyProperty then 
-                        continue
-                    end
-
-                    if type(TransparencyProperty) == "table" then 
-                        for _, Property in TransparencyProperty do 
-                            NewTween = Tween:FadeItem(Value, Property, Bool, SubPage.Window.FadeSpeed)
-                        end
-                    else
-                        NewTween = Tween:FadeItem(Value, TransparencyProperty, Bool, SubPage.Window.FadeSpeed)
-                    end
-                end
-
-                Library:Connect(NewTween.Tween.Completed, function()
-                    Debounce = false
-                end)
             end
 
             Items["Inactive"]:Connect("MouseButton1Down", function()
