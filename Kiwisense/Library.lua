@@ -2846,7 +2846,7 @@ local Library do
 
                 Items["RealDropdown"] = Instances:Create("TextButton", {
                     Parent = Items["Dropdown"].Instance,
-                    Text = "", 
+                    Text = "",
                     AutoButtonColor = false,
                     Name = "\0",
                     BorderColor3 = FromRGB(0, 0, 0),
@@ -2855,8 +2855,8 @@ local Library do
                     Size = UDim2New(1, 0, 0, 25),
                     ZIndex = 2,
                     BorderSizePixel = 0,
-                    BackgroundColor3 = FromRGB(34, 39, 45)
-                })  Items["RealDropdown"]:AddToTheme({BackgroundColor3 = "Element"})
+                    BackgroundColor3 = FromRGB(58, 58, 65)
+                })
 
                 Instances:Create("UIGradient", {
                     Parent = Items["RealDropdown"].Instance,
@@ -3059,11 +3059,11 @@ local Library do
             end
 
             Items["RealDropdown"]:OnHover(function()
-                Items["RealDropdown"]:Tween(nil, {BackgroundColor3 = Library:GetLighterColor(Library.Theme.Element, 1.45)})
+                Items["RealDropdown"]:Tween(nil, {BackgroundColor3 = FromRGB(78, 78, 86)})
             end)
 
             Items["RealDropdown"]:OnHoverLeave(function()
-                Items["RealDropdown"]:Tween(nil, {BackgroundColor3 = Library.Theme.Element})
+                Items["RealDropdown"]:Tween(nil, {BackgroundColor3 = FromRGB(58, 58, 65)})
             end)
 
             function Dropdown:Get()
