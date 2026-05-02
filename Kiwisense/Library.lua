@@ -1487,7 +1487,6 @@ local Library do
     local RectNew = Rect.new
 
     local IsMobile = UserInputService.TouchEnabled or false
-    Library.IsMobile = IsMobile
 
     gethui = gethui or function()
         return CoreGui
@@ -1551,6 +1550,8 @@ local Library do
         MainFrame = nil,
         Font = nil,
         KeyList = nil,
+
+        IsMobile = IsMobile,
     }
 
     local Keys = {
