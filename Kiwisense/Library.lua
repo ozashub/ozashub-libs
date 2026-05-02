@@ -2201,8 +2201,7 @@ local Library do
         Name = "\0",
         ZIndexBehavior = Enum.ZIndexBehavior.Global,
         DisplayOrder = 2,
-        ResetOnSpawn = false,
-        IgnoreGuiInset = true
+        ResetOnSpawn = false
     })
 
     Library.UnusedHolder = Instances:Create("ScreenGui", {
@@ -2482,8 +2481,7 @@ local Library do
         XOffset = XOffset or 0
         YOffset = YOffset or 0
 
-        local MouseLoc = game:GetService("UserInputService"):GetMouseLocation()
-        local MousePosition = Vector2New(MouseLoc.X + XOffset, MouseLoc.Y + YOffset)
+        local MousePosition = Vector2New(Mouse.X + XOffset, Mouse.Y + YOffset)
 
         return MousePosition.X >= Frame.AbsolutePosition.X and MousePosition.X <= Frame.AbsolutePosition.X + Frame.AbsoluteSize.X
         and MousePosition.Y >= Frame.AbsolutePosition.Y and MousePosition.Y <= Frame.AbsolutePosition.Y + Frame.AbsoluteSize.Y
@@ -7550,79 +7548,7 @@ local Library do
                     BackgroundColor3 = FromRGB(255, 255, 255)
                 })
 
-                Items["Search"] = Instances:Create("Frame", {
-                    Parent = Items["Content"].Instance,
-                    Name = "\0",
-                    Size = UDim2New(0, 250, 0, 32),
-                    Position = UDim2New(0, 8, 0, 8),
-                    BorderColor3 = FromRGB(0, 0, 0),
-                    ZIndex = 2,
-                    BorderSizePixel = 0,
-                    BackgroundColor3 = FromRGB(22, 25, 29)
-                })  Items["Search"]:AddToTheme({BackgroundColor3 = "Inline"})
-
-                Instances:Create("UIGradient", {
-                    Parent = Items["Search"].Instance,
-                    Name = "\0",
-                    Rotation = 84,
-                    Color = RGBSequence{RGBSequenceKeypoint(0, FromRGB(255, 255, 255)), RGBSequenceKeypoint(1, FromRGB(211, 211, 211))}
-                }):AddToTheme({Color = function()
-                    return RGBSequence{RGBSequenceKeypoint(0, FromRGB(255, 255, 255)), RGBSequenceKeypoint(1, Library.Theme["Dark Gradient"])}
-                end})
-
-                Instances:Create("UICorner", {
-                    Parent = Items["Search"].Instance,
-                    Name = "\0",
-                    CornerRadius = UDimNew(0, 5)
-                })
-
-                Instances:Create("UIStroke", {
-                    Parent = Items["Search"].Instance,
-                    Name = "\0",
-                    Color = FromRGB(32, 36, 42),
-                    Transparency = 0.4000000059604645,
-                    ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-                }):AddToTheme({Color = "Border"})
-
-                Items["SearchIcon"] = Instances:Create("ImageLabel", {
-                    Parent = Items["Search"].Instance,
-                    Name = "\0",
-                    ScaleType = Enum.ScaleType.Fit,
-                    ImageTransparency = 0.5,
-                    BorderColor3 = FromRGB(0, 0, 0),
-                    Size = UDim2New(0, 20, 0, 20),
-                    AnchorPoint = Vector2New(0, 0.5),
-                    Image = "rbxassetid://71924825350727",
-                    BackgroundTransparency = 1,
-                    Position = UDim2New(0, 8, 0.5, 0),
-                    ZIndex = 2,
-                    BorderSizePixel = 0,
-                    BackgroundColor3 = FromRGB(255, 255, 255)
-                })  Items["SearchIcon"]:AddToTheme({ImageColor3 = "Image"})
-
-                Items["Input"] = Instances:Create("TextBox", {
-                    Parent = Items["Search"].Instance,
-                    Name = "\0",
-                    FontFace = Library.Font,
-                    AnchorPoint = Vector2New(0, 0.5),
-                    PlaceholderColor3 = FromRGB(185, 185, 185),
-                    PlaceholderText = "search",
-                    TextSize = 14,
-                    Size = UDim2New(1, -45, 0, 15),
-                    ClipsDescendants = true,
-                    BorderColor3 = FromRGB(0, 0, 0),
-                    Text = "",
-                    ZIndex = 2,
-                    Position = UDim2New(0, 35, 0.5, -2),
-                    BackgroundTransparency = 1,
-                    TextXAlignment = Enum.TextXAlignment.Left,
-                    TextColor3 = FromRGB(255, 255, 255),
-                    ClearTextOnFocus = false,
-                    BorderSizePixel = 0,
-                    BackgroundColor3 = FromRGB(255, 255, 255)
-                })  Items["Input"]:AddToTheme({TextColor3 = "Text", PlaceholderColor3 = "Inactive Text"})
-
-                if IsMobile then 
+                if IsMobile then
                     Items["FloatingButton"] = Instances:Create("TextButton", {
                         Parent = Library.Holder.Instance,
                         Text = "",
@@ -7664,26 +7590,6 @@ local Library do
                     end)
                 end
 
-                UserInputService.MouseIconEnabled = false
-
-                Items["MouseImage"] = Instances:Create("ImageLabel", {
-                    Parent = Library.Holder.Instance,
-                    Name = "\0",
-                    ScaleType = Enum.ScaleType.Fit,
-                    BorderColor3 = FromRGB(0, 0, 0),
-                    Image = "rbxassetid://136489814131946",
-                    BackgroundTransparency = 1,
-                    Position = UDim2New(0, 0, 0, 0),
-                    Size = UDim2New(0, 20, 0, 20),
-                    ZIndex = 99999,
-                    BorderSizePixel = 0,
-                    BackgroundColor3 = FromRGB(255, 255, 255)
-                })  Items["MouseImage"]:AddToTheme({ImageColor3 = "Accent"})
-
-                Library:Connect(RunService.RenderStepped, function()
-                    local MouseLocation = UserInputService:GetMouseLocation() 
-                    Items["MouseImage"].Instance.Position = UDim2New(0, MouseLocation.X - 1, 0, MouseLocation.Y - 56)
-                end)
             end
 
             local Debounce = false 
@@ -7738,14 +7644,6 @@ local Library do
                 Library:Connect(NewTween.Tween.Completed, function()
                     Debounce = false
                     Items["MainFrame"].Instance.Visible = Bool
-
-                    if Window.IsOpen then
-                        Items["MouseImage"].Instance.Visible = true
-                        UserInputService.MouseIconEnabled = false 
-                    else
-                        Items["MouseImage"].Instance.Visible = false
-                        UserInputService.MouseIconEnabled = true 
-                    end
                 end)
             end
 
@@ -7764,45 +7662,6 @@ local Library do
                 end
             end)
 
-            local RenderStepped
-
-            Items["Input"]:Connect("Focused", function()
-                local PageSearchData = Library.SearchItems[Library.CurrentPage]
-
-                if not PageSearchData then
-                    return 
-                end
-
-                RenderStepped = RunService.RenderStepped:Connect(function()
-                    for Index, Value in PageSearchData do 
-                        local Name = Value.Name
-                        local Element = Value.Item
-
-                        if StringFind(StringLower(Name), StringLower(Items["Input"].Instance.Text)) then
-                            if Items["Input"].Instance.Text ~= "" then 
-                                Element.Instance.Visible  = true 
-                                Element:Tween(nil, {Size = Window:GetOldSize(Element)})
-                            else
-                                Element.Instance.Visible  = true 
-                                Element:Tween(nil, {Size = Window:GetOldSize(Element)})
-                            end
-                        else
-                            Window:AddToOldSizes(Element, Element.Instance.Size)
-                            Element:Tween(nil, {Size = UDim2New(Window:GetOldSize(Element).X.Scale, Window:GetOldSize(Element).X.Offset, 0, 0)})
-                            task.wait(0.1)
-                            Element.Instance.Visible = false
-                        end
-                    end
-                end)
-            end)
-
-            Items["Input"]:Connect("FocusLost", function()
-                if RenderStepped then 
-                    RenderStepped:Disconnect()
-                    RenderStepped = nil
-                end
-            end)
-            
             local IsMinimized = false
             local OldSize = Items["MainFrame"].Instance.AbsoluteSize
 
@@ -7871,8 +7730,8 @@ local Library do
                     Name = "\0",
                     BorderColor3 = FromRGB(0, 0, 0),
                     BackgroundTransparency = 1,
-                    Position = UDim2New(0, 7, 0, 48),
-                    Size = UDim2New(1, -14, 1, -55),
+                    Position = UDim2New(0, 7, 0, 8),
+                    Size = UDim2New(1, -14, 1, -15),
                     ZIndex = 2,
                     BorderSizePixel = 0,
                     BackgroundColor3 = FromRGB(255, 255, 255)
