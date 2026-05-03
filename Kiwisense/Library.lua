@@ -8871,13 +8871,13 @@ local Library do
                 Instances:Create("UICorner", {
                     Parent = Items["Section"].Instance,
                     Name = "\0",
-                    CornerRadius = UDimNew(0, 5)
+                    CornerRadius = UDimNew(0, 6)
                 })
 
                 Items["Topbar"] = Instances:Create("Frame", {
                     Parent = Items["Section"].Instance,
                     Name = "\0",
-                    Size = UDim2New(1, 0, 0, 35),
+                    Size = UDim2New(1, 0, 0, 28),
                     BorderColor3 = FromRGB(0, 0, 0),
                     ZIndex = 2,
                     BorderSizePixel = 0,
@@ -8887,7 +8887,7 @@ local Library do
                 Instances:Create("UICorner", {
                     Parent = Items["Topbar"].Instance,
                     Name = "\0",
-                    CornerRadius = UDimNew(0, 5)
+                    CornerRadius = UDimNew(0, 6)
                 })
 
                 Instances:Create("UIGradient", {
@@ -8923,9 +8923,9 @@ local Library do
                     Size = UDim2New(1, -125, 0, 15),
                     BackgroundTransparency = 1,
                     TextXAlignment = Enum.TextXAlignment.Left,
-                    Position = UDim2New(0, 8, 0.5, 0),
+                    Position = UDim2New(0, 10, 0.5, 0),
                     ZIndex = 2,
-                    TextSize = 14,
+                    TextSize = 13,
                     BackgroundColor3 = FromRGB(255, 255, 255)
                 })  Items["Title"]:AddToTheme({TextColor3 = "Text"})
 
@@ -8970,7 +8970,7 @@ local Library do
                     BorderColor3 = FromRGB(0, 0, 0),
                     BorderSizePixel = 0,
                     BackgroundTransparency = 1,
-                    Position = UDim2New(0, 12, 0, 45),
+                    Position = UDim2New(0, 12, 0, 38),
                     Size = UDim2New(1, -24, 0, 0),
                     ZIndex = 2,
                     AutomaticSize = Enum.AutomaticSize.Y,
