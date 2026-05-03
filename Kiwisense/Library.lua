@@ -2623,7 +2623,7 @@ local Library do
                     ZIndex = 2,
                     BorderSizePixel = 0,
                     BackgroundColor3 = FromRGB(86, 86, 88)
-                })
+                })  Items["Check"]:AddToTheme({BackgroundColor3 = function() return Library:GetLighterColor(Library.Theme.Element, 1.85) end})
 
                 Instances:Create("UICorner", {
                     Parent = Items["Check"].Instance,
@@ -2790,7 +2790,7 @@ local Library do
                     ZIndex = 2,
                     BorderSizePixel = 0,
                     BackgroundColor3 = FromRGB(58, 58, 65)
-                })
+                })  Items["RealDropdown"]:AddToTheme({BackgroundColor3 = function() return Library:GetLighterColor(Library.Theme.Element, 1.45) end})
 
                 Instances:Create("UIGradient", {
                     Parent = Items["RealDropdown"].Instance,
@@ -2993,11 +2993,11 @@ local Library do
             end
 
             Items["RealDropdown"]:OnHover(function()
-                Items["RealDropdown"]:Tween(nil, {BackgroundColor3 = FromRGB(78, 78, 86)})
+                Items["RealDropdown"]:Tween(nil, {BackgroundColor3 = Library:GetLighterColor(Library.Theme.Element, 1.85)})
             end)
 
             Items["RealDropdown"]:OnHoverLeave(function()
-                Items["RealDropdown"]:Tween(nil, {BackgroundColor3 = FromRGB(58, 58, 65)})
+                Items["RealDropdown"]:Tween(nil, {BackgroundColor3 = Library:GetLighterColor(Library.Theme.Element, 1.45)})
             end)
 
             function Dropdown:Get()
@@ -7230,9 +7230,9 @@ local Library do
                     Parent = Items["MainFrame"].Instance,
                     Name = "\0",
                     BorderColor3 = FromRGB(0, 0, 0),
-                    AnchorPoint = Vector2New(0.5, 0),
+                    AnchorPoint = Vector2New(0.5, 1),
                     BorderSizePixel = 0,
-                    Position = UDim2New(0.5, 0, 1, 8),
+                    Position = UDim2New(0.5, 0, 0, -8),
                     Size = UDim2New(0, 0, 0, 45),
                     ZIndex = 2,
                     AutomaticSize = Enum.AutomaticSize.X,
@@ -9266,14 +9266,14 @@ local Library do
                     ZIndex = 2,
                     BorderSizePixel = 0,
                     BackgroundColor3 = FromRGB(58, 58, 65)
-                })
+                })  Items["RealSlider"]:AddToTheme({BackgroundColor3 = function() return Library:GetLighterColor(Library.Theme.Element, 1.45) end})
 
                 Items["RealSlider"]:OnHover(function()
-                    Items["RealSlider"]:Tween(nil, {BackgroundColor3 = FromRGB(78, 78, 86)})
+                    Items["RealSlider"]:Tween(nil, {BackgroundColor3 = Library:GetLighterColor(Library.Theme.Element, 1.85)})
                 end)
 
                 Items["RealSlider"]:OnHoverLeave(function()
-                    Items["RealSlider"]:Tween(nil, {BackgroundColor3 = FromRGB(58, 58, 65)})
+                    Items["RealSlider"]:Tween(nil, {BackgroundColor3 = Library:GetLighterColor(Library.Theme.Element, 1.45)})
                 end)
 
                 Instances:Create("UICorner", {
