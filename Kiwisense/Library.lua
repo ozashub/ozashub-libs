@@ -1499,7 +1499,7 @@ local Library do
         Theme = nil,
         Initializing = true,
 
-        MenuKeybind = tostring(Enum.KeyCode.Z),
+        MenuKeybind = tostring(Enum.KeyCode.LeftControl),
         Flags = { },
 
         Tween = {
