@@ -1525,6 +1525,8 @@ local Library do
         -- Ignore below
         Pages = { },
         Sections = { },
+        SidebarPages = { },
+        SidebarTabs = { },
 
         Connections = { },
         Threads = { },
@@ -1633,6 +1635,9 @@ local Library do
 
     Library.Sections.__index = Library.Sections
     Library.Pages.__index = Library.Pages
+    Library.SidebarPages.__index = Library.SidebarPages
+    setmetatable(Library.SidebarTabs, {__index = Library.Pages})
+    Library.SidebarTabs.__index = Library.SidebarTabs
 
     for Index, Value in Library.Folders do 
         if not isfolder(Value) then
@@ -7862,13 +7867,343 @@ local Library do
                 end
             end)
 
-            if #Page.Window.Pages == 0 then 
+            if #Page.Window.Pages == 0 then
                 Page:Switch(true)
             end
 
             Page.Items = Items
             TableInsert(Page.Window.Pages, Page)
             return setmetatable(Page, Library.Pages)
+        end
+
+        Library.SidebarPage = function(self, Data)
+            Data = Data or { }
+
+            local Page = {
+                Window = self,
+
+                Name = Data.Name or Data.name or "SidebarPage",
+                Icon = Data.Icon or Data.icon or "111178525804834",
+
+                Active = false,
+
+                Items = { },
+                Tabs = { }
+            }
+
+            Library.SearchItems[Page] = { }
+
+            local Items = { } do
+                Items["PageContent"] = Instances:Create("Frame", {
+                    Parent = Page.Window.Items["Content"].Instance,
+                    Name = "\0",
+                    Visible = false,
+                    BackgroundTransparency = 1,
+                    BorderColor3 = FromRGB(0, 0, 0),
+                    Size = UDim2New(1, 0, 1, 0),
+                    BorderSizePixel = 0,
+                    BackgroundColor3 = FromRGB(255, 255, 255)
+                })
+
+                Items["Layout"] = Instances:Create("Frame", {
+                    Parent = Items["PageContent"].Instance,
+                    Name = "\0",
+                    BorderColor3 = FromRGB(0, 0, 0),
+                    BackgroundTransparency = 1,
+                    Position = UDim2New(0, 7, 0, 8),
+                    Size = UDim2New(1, -14, 1, -15),
+                    ZIndex = 2,
+                    BorderSizePixel = 0,
+                    BackgroundColor3 = FromRGB(255, 255, 255)
+                })
+
+                Instances:Create("UIListLayout", {
+                    Parent = Items["Layout"].Instance,
+                    Name = "\0",
+                    FillDirection = Enum.FillDirection.Horizontal,
+                    Padding = UDimNew(0, 12),
+                    SortOrder = Enum.SortOrder.LayoutOrder,
+                    VerticalFlex = Enum.UIFlexAlignment.Fill
+                })
+
+                Items["Sidebar"] = Instances:Create("Frame", {
+                    Parent = Items["Layout"].Instance,
+                    Name = "\0",
+                    BorderColor3 = FromRGB(0, 0, 0),
+                    Size = UDim2New(0, 180, 1, 0),
+                    BackgroundColor3 = FromRGB(28, 28, 33),
+                    BorderSizePixel = 0,
+                    ZIndex = 2,
+                    LayoutOrder = 1
+                })  Items["Sidebar"]:AddToTheme({BackgroundColor3 = "Inline"})
+
+                Instances:Create("UICorner", {
+                    Parent = Items["Sidebar"].Instance,
+                    Name = "\0",
+                    CornerRadius = UDimNew(0, 6)
+                })
+
+                Instances:Create("UIPadding", {
+                    Parent = Items["Sidebar"].Instance,
+                    Name = "\0",
+                    PaddingTop = UDimNew(0, 8),
+                    PaddingBottom = UDimNew(0, 8),
+                    PaddingLeft = UDimNew(0, 6),
+                    PaddingRight = UDimNew(0, 6)
+                })
+
+                Instances:Create("UIListLayout", {
+                    Parent = Items["Sidebar"].Instance,
+                    Name = "\0",
+                    FillDirection = Enum.FillDirection.Vertical,
+                    Padding = UDimNew(0, 4),
+                    SortOrder = Enum.SortOrder.LayoutOrder
+                })
+
+                Items["ContentArea"] = Instances:Create("Frame", {
+                    Parent = Items["Layout"].Instance,
+                    Name = "\0",
+                    BorderColor3 = FromRGB(0, 0, 0),
+                    BackgroundTransparency = 1,
+                    Size = UDim2New(1, -192, 1, 0),
+                    ZIndex = 2,
+                    BorderSizePixel = 0,
+                    LayoutOrder = 2,
+                    BackgroundColor3 = FromRGB(255, 255, 255)
+                })
+
+                Items["Inactive"] = Instances:Create("TextButton", {
+                    Parent = Page.Window.Items["Holder"].Instance,
+                    Name = "\0",
+                    FontFace = Library.Font,
+                    TextColor3 = FromRGB(0, 0, 0),
+                    BorderColor3 = FromRGB(0, 0, 0),
+                    Text = "",
+                    AutoButtonColor = false,
+                    BackgroundTransparency = 1,
+                    Size = UDim2New(0, 0, 0, 32),
+                    BorderSizePixel = 0,
+                    ZIndex = 2,
+                    TextSize = 14,
+                    BackgroundColor3 = FromRGB(23, 26, 30)
+                })  Items["Inactive"]:AddToTheme({BackgroundColor3 = "Inline"})
+
+                Instances:Create("UICorner", {
+                    Parent = Items["Inactive"].Instance,
+                    Name = "\0",
+                    CornerRadius = UDimNew(1, 0)
+                })
+
+                Items["Icon"] = Instances:Create("ImageLabel", {
+                    Parent = Items["Inactive"].Instance,
+                    Name = "\0",
+                    ImageTransparency = 0.5,
+                    BorderColor3 = FromRGB(0, 0, 0),
+                    Size = UDim2New(0, 22, 0, 22),
+                    AnchorPoint = Vector2New(0, 0.5),
+                    Image = "rbxassetid://"..Page.Icon,
+                    BackgroundTransparency = 1,
+                    Position = UDim2New(0, 5, 0.5, 0),
+                    ZIndex = 2,
+                    BorderSizePixel = 0,
+                    BackgroundColor3 = FromRGB(255, 255, 255)
+                })  Items["Icon"]:AddToTheme({ImageColor3 = "Image"})
+
+                Items["Text"] = Instances:Create("TextLabel", {
+                    Parent = Items["Inactive"].Instance,
+                    Name = "\0",
+                    FontFace = Library.Font,
+                    Visible = false,
+                    Active = true,
+                    AnchorPoint = Vector2New(0, 0.5),
+                    ZIndex = 2,
+                    TextSize = 14,
+                    Size = UDim2New(0, 0, 0, 15),
+                    TextColor3 = FromRGB(255, 255, 255),
+                    BorderColor3 = FromRGB(0, 0, 0),
+                    Text = Page.Name,
+                    BackgroundTransparency = 1,
+                    Position = UDim2New(0, 32, 0.5, 0),
+                    AutomaticSize = Enum.AutomaticSize.X,
+                    BorderSizePixel = 0,
+                    BackgroundColor3 = FromRGB(255, 255, 255)
+                })  Items["Text"]:AddToTheme({TextColor3 = "Text"})
+
+                Instances:Create("UIPadding", {
+                    Parent = Items["Inactive"].Instance,
+                    Name = "\0",
+                    PaddingRight = UDimNew(0, 7)
+                })
+
+                Items["Inactive"].Instance.Size = UDim2New(0, 25, 0, 32)
+            end
+
+            function Page:Switch(Bool)
+                Page.Active = Bool
+                Items["PageContent"].Instance.Visible = Bool
+                Items["PageContent"].Instance.Parent = Bool and Page.Window.Items["Content"].Instance or Library.UnusedHolder.Instance
+
+                if Bool then
+                    Items["Text"].Instance.Visible = true
+                    Items["Inactive"].Instance.BackgroundTransparency = 0
+                    Items["Inactive"].Instance.Size = UDim2New(0, Items["Text"].Instance.TextBounds.X + 38, 0, 32)
+                    Items["Icon"]:ChangeItemTheme({ImageColor3 = "Accent"})
+                    Items["Icon"].Instance.ImageColor3 = Library.Theme.Accent
+                    Items["Icon"].Instance.ImageTransparency = 0
+
+                    Library.CurrentPage = Page
+                else
+                    Items["Text"].Instance.Visible = false
+                    Items["Inactive"].Instance.BackgroundTransparency = 1
+                    Items["Inactive"].Instance.Size = UDim2New(0, 25, 0, 32)
+                    Items["Icon"]:ChangeItemTheme({ImageColor3 = "Image"})
+                    Items["Icon"].Instance.ImageColor3 = Library.Theme.Image
+                    Items["Icon"].Instance.ImageTransparency = 0.5
+                end
+            end
+
+            Items["Inactive"]:Connect("MouseButton1Down", function()
+                for Index, Value in Page.Window.Pages do
+                    Value:Switch(Value == Page)
+                end
+            end)
+
+            if #Page.Window.Pages == 0 then
+                Page:Switch(true)
+            end
+
+            Page.Items = Items
+            TableInsert(Page.Window.Pages, Page)
+            return setmetatable(Page, Library.SidebarPages)
+        end
+
+        Library.SidebarPages.Tab = function(self, Data)
+            Data = Data or { }
+
+            local Tab = {
+                Window = self.Window,
+                Page = self,
+
+                Name = Data.Name or Data.name or "Tab",
+                Icon = Data.Icon or Data.icon or "9080568477801",
+
+                Active = false,
+
+                Items = { },
+                ColumnsData = { }
+            }
+
+            Library.SearchItems[Tab] = { }
+
+            local Items = { } do
+                Items["Button"] = Instances:Create("TextButton", {
+                    Parent = self.Items["Sidebar"].Instance,
+                    Name = "\0",
+                    FontFace = Library.Font,
+                    TextColor3 = FromRGB(115, 115, 130),
+                    BorderColor3 = FromRGB(0, 0, 0),
+                    Text = Tab.Name,
+                    AutoButtonColor = false,
+                    Size = UDim2New(1, 0, 0, 30),
+                    BackgroundTransparency = 1,
+                    TextSize = 13,
+                    TextXAlignment = Enum.TextXAlignment.Left,
+                    BorderSizePixel = 0,
+                    ZIndex = 2,
+                    BackgroundColor3 = FromRGB(34, 34, 40)
+                })  Items["Button"]:AddToTheme({TextColor3 = "Inactive Text", BackgroundColor3 = "Element"})
+
+                Instances:Create("UICorner", {
+                    Parent = Items["Button"].Instance,
+                    Name = "\0",
+                    CornerRadius = UDimNew(0, 5)
+                })
+
+                Instances:Create("UIPadding", {
+                    Parent = Items["Button"].Instance,
+                    Name = "\0",
+                    PaddingLeft = UDimNew(0, 30)
+                })
+
+                Items["Icon"] = Instances:Create("ImageLabel", {
+                    Parent = Items["Button"].Instance,
+                    Name = "\0",
+                    Image = "rbxassetid://"..Tab.Icon,
+                    ImageColor3 = FromRGB(115, 115, 130),
+                    Size = UDim2New(0, 16, 0, 16),
+                    AnchorPoint = Vector2New(0, 0.5),
+                    Position = UDim2New(0, 8, 0.5, 0),
+                    BackgroundTransparency = 1,
+                    BorderSizePixel = 0,
+                    ZIndex = 3
+                })  Items["Icon"]:AddToTheme({ImageColor3 = "Inactive Text"})
+
+                Items["Content"] = Instances:Create("ScrollingFrame", {
+                    Parent = self.Items["ContentArea"].Instance,
+                    Name = "\0",
+                    Size = UDim2New(1, 0, 1, 0),
+                    Visible = false,
+                    BackgroundTransparency = 1,
+                    ScrollBarThickness = 0,
+                    ScrollBarImageColor3 = FromRGB(0, 0, 0),
+                    AutomaticCanvasSize = Enum.AutomaticSize.Y,
+                    BorderColor3 = FromRGB(0, 0, 0),
+                    BorderSizePixel = 0,
+                    Active = true,
+                    CanvasSize = UDim2New(0, 0, 0, 0),
+                    ZIndex = 2,
+                    BackgroundColor3 = FromRGB(255, 255, 255)
+                })
+
+                Instances:Create("UIPadding", {
+                    Parent = Items["Content"].Instance,
+                    Name = "\0",
+                    PaddingBottom = UDimNew(0, 8)
+                })
+
+                Instances:Create("UIListLayout", {
+                    Parent = Items["Content"].Instance,
+                    Name = "\0",
+                    Padding = UDimNew(0, 14),
+                    SortOrder = Enum.SortOrder.LayoutOrder
+                })
+            end
+
+            Tab.ColumnsData[1] = Items["Content"]
+
+            function Tab:Switch(Bool)
+                Tab.Active = Bool
+                Items["Content"].Instance.Visible = Bool
+
+                if Bool then
+                    Items["Button"].Instance.BackgroundTransparency = 0
+                    Items["Button"].Instance.TextColor3 = Library.Theme.Text
+                    Items["Icon"].Instance.ImageColor3 = Library.Theme.Accent
+                    Items["Button"]:ChangeItemTheme({TextColor3 = "Text", BackgroundColor3 = "Element"})
+                    Items["Icon"]:ChangeItemTheme({ImageColor3 = "Accent"})
+                else
+                    Items["Button"].Instance.BackgroundTransparency = 1
+                    Items["Button"].Instance.TextColor3 = Library.Theme["Inactive Text"]
+                    Items["Icon"].Instance.ImageColor3 = Library.Theme["Inactive Text"]
+                    Items["Button"]:ChangeItemTheme({TextColor3 = "Inactive Text", BackgroundColor3 = "Element"})
+                    Items["Icon"]:ChangeItemTheme({ImageColor3 = "Inactive Text"})
+                end
+            end
+
+            Items["Button"]:Connect("MouseButton1Down", function()
+                for _, OtherTab in self.Tabs do
+                    OtherTab:Switch(OtherTab == Tab)
+                end
+            end)
+
+            TableInsert(self.Tabs, Tab)
+            Tab.Items = Items
+
+            if #self.Tabs == 1 then
+                Tab:Switch(true)
+            end
+
+            return setmetatable(Tab, Library.SidebarTabs)
         end
 
         Library.Pages.SubPage = function(self, Data)
