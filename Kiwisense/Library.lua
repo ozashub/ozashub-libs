@@ -7624,7 +7624,12 @@ local Library do
 
             Window.Items = Items
 
-            Window:SetOpen(true)
+            if Library.Initializing then
+                Library.OnInitDone = Library.OnInitDone or {}
+                table.insert(Library.OnInitDone, function() Window:SetOpen(true) end)
+            else
+                Window:SetOpen(true)
+            end
             return setmetatable(Window, self)
         end
 
@@ -9858,9 +9863,16 @@ local Library do
             end
         end
 
+        if Library.OnInitDone then
+            for _, fn in ipairs(Library.OnInitDone) do
+                pcall(fn)
+            end
+            Library.OnInitDone = nil
+        end
+
         Library.Initializing = false
     end
-end 
+end
 
 getgenv().Library = Library
 return Library
