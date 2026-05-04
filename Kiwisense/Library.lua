@@ -2666,6 +2666,7 @@ local Library do
                 if Bool then
                     Items["Indicator"]:ChangeItemTheme({BackgroundColor3 = "Accent"})
                     Items["Inline"]:ChangeItemTheme({BackgroundColor3 = "Accent"})
+                    Items["Check"]:ChangeItemTheme({BackgroundColor3 = function() return FromRGB(255, 255, 255) end})
 
                     Items["Indicator"]:Tween(nil, {BackgroundColor3 = Library.Theme.Accent})
                     Items["Inline"]:Tween(nil, {BackgroundColor3 = Library.Theme.Accent})
@@ -2678,6 +2679,7 @@ local Library do
                 else
                     Items["Indicator"]:ChangeItemTheme({BackgroundColor3 = "Element"})
                     Items["Inline"]:ChangeItemTheme({BackgroundColor3 = "Element"})
+                    Items["Check"]:ChangeItemTheme({BackgroundColor3 = function() return Library:GetLighterColor(Library.Theme.Element, 1.85) end})
 
                     Items["Indicator"]:Tween(nil, {BackgroundColor3 = Library.Theme.Element})
                     Items["Inline"]:Tween(nil, {BackgroundColor3 = Library.Theme.Element})
